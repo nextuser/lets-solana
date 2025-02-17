@@ -1,0 +1,11 @@
+ljl@ljl-i5-14400:client$ npx tsx token_decorate2.ts
+RUN...
+connected : Public Key: 8H2MhwXPM16c3yPvJdYgQYFoVwiag6af3saEDxWZNKZj
+connected: https://mainnet.helius-rpc.com/?api-key=8df9cdc2-6352-4f14-8d24-cd6b24ae7ae1
+mint: AQaqt5UeTCTvYbMLyD8V2iSWsgnB8PzUq8tAEhvsSbYY
+begin ceate meta account for: PublicKey [PublicKey(AQaqt5UeTCTvYbMLyD8V2iSWsgnB8PzUq8tAEhvsSbYY)] {
+  _bn: <BN: 8bc3ce9d4a5cf67689383552a6f47946d691eaeebc8e8c3390893ca6cfca0095>
+}
+(node:1613704) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+183,63,182,7,109,167,251,98,63,64,172,15,3,111,46,151,98,134,209,207,118,45,39,200,223,195,151,199,243,117,192,21,78,157,153,3,101,210,117,40,249,221,148,251,62,125,24,97,153,95,176,191,28,23,97,78,169,27,131,255,58,115,181,9

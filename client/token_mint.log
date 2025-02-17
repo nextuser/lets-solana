@@ -1,0 +1,12 @@
+connected : Public Key: 8H2MhwXPM16c3yPvJdYgQYFoVwiag6af3saEDxWZNKZj
+connected: https://mainnet.helius-rpc.com/?api-key=8df9cdc2-6352-4f14-8d24-cd6b24ae7ae1
+(node:1582771) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+token mint: AQaqt5UeTCTvYbMLyD8V2iSWsgnB8PzUq8tAEhvsSbYY
+minter 8H2MhwXPM16c3yPvJdYgQYFoVwiag6af3saEDxWZNKZj
+freezer 3ycoXwq1csxaf6Yd94cDfQkCzn6vvoRKJSGGQGkhsXB6
+supply : 0n
+token account: 6xnyZm7f22Z9zmwvfnpCE6t2DCL2EitkVP7tRBRBGZNs
+supply,decimal : 100000000n 6
+token account info : owner 8H2MhwXPM16c3yPvJdYgQYFoVwiag6af3saEDxWZNKZj ,account address= 6xnyZm7f22Z9zmwvfnpCE6t2DCL2EitkVP7tRBRBGZNs token address AQaqt5UeTCTvYbMLyD8V2iSWsgnB8PzUq8tAEhvsSbYY
+token account amount: 100000000n 6xnyZm7f22Z9zmwvfnpCE6t2DCL2EitkVP7tRBRBGZNs

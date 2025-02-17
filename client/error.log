@@ -1,0 +1,64 @@
+Node.js v23.5.0
+ljl@ljl-i5-14400:client$ solana balance
+0.004602956 SOL
+ljl@ljl-i5-14400:client$ npx tsx token_mint.ts
+connected : Public Key: 8H2MhwXPM16c3yPvJdYgQYFoVwiag6af3saEDxWZNKZj
+connected: https://mainnet.helius-rpc.com/?api-key=8df9cdc2-6352-4f14-8d24-cd6b24ae7ae1
+(node:1582771) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+token mint: AQaqt5UeTCTvYbMLyD8V2iSWsgnB8PzUq8tAEhvsSbYY
+minter 8H2MhwXPM16c3yPvJdYgQYFoVwiag6af3saEDxWZNKZj
+freezer 3ycoXwq1csxaf6Yd94cDfQkCzn6vvoRKJSGGQGkhsXB6
+supply : 0n
+token account: 6xnyZm7f22Z9zmwvfnpCE6t2DCL2EitkVP7tRBRBGZNs
+supply,decimal : 100000000n 6
+token account info : owner 8H2MhwXPM16c3yPvJdYgQYFoVwiag6af3saEDxWZNKZj ,account address= 6xnyZm7f22Z9zmwvfnpCE6t2DCL2EitkVP7tRBRBGZNs token address AQaqt5UeTCTvYbMLyD8V2iSWsgnB8PzUq8tAEhvsSbYY
+token account amount: 100000000n 6xnyZm7f22Z9zmwvfnpCE6t2DCL2EitkVP7tRBRBGZNs
+ljl@ljl-i5-14400:client$ vi token_mint.log
+ljl@ljl-i5-14400:client$ export TOKEN_MINT=AQaqt5UeTCTvYbMLyD8V2iSWsgnB8PzUq8tAEhvsSbYY
+ljl@ljl-i5-14400:client$ npx tsx token_decorate2.ts
+RUN...
+connected : Public Key: 8H2MhwXPM16c3yPvJdYgQYFoVwiag6af3saEDxWZNKZj
+connected: https://mainnet.helius-rpc.com/?api-key=8df9cdc2-6352-4f14-8d24-cd6b24ae7ae1
+mint: AQaqt5UeTCTvYbMLyD8V2iSWsgnB8PzUq8tAEhvsSbYY
+begin ceate meta account for: PublicKey [PublicKey(AQaqt5UeTCTvYbMLyD8V2iSWsgnB8PzUq8tAEhvsSbYY)] {
+  _bn: <BN: 8bc3ce9d4a5cf67689383552a6f47946d691eaeebc8e8c3390893ca6cfca0095>
+}
+(node:1586309) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+/home/ljl/work/solana/pg-ex/client/node_modules/.pnpm/@solana+web3.js@1.98.0_bufferutil@4.0.9_utf-8-validate@5.0.10/node_modules/@solana/web3.js/src/connection.ts:6047
+      throw new SendTransactionError({
+            ^
+
+
+SendTransactionError: Simulation failed. 
+Message: Transaction simulation failed: Error processing Instruction 0: custom program error: 0x1. 
+Logs: 
+[
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s invoke [1]",
+  "Program log: IX: Create Metadata Accounts v3",
+  "Program 11111111111111111111111111111111 invoke [2]",
+  "Transfer: insufficient lamports 1077076, need 15115600",
+  "Program 11111111111111111111111111111111 failed: custom program error: 0x1",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s consumed 8844 of 200000 compute units",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s failed: custom program error: 0x1"
+]. 
+Catch the `SendTransactionError` and call `getLogs()` on it for full details.
+    at Connection.sendEncodedTransaction (/home/ljl/work/solana/pg-ex/client/node_modules/.pnpm/@solana+web3.js@1.98.0_bufferutil@4.0.9_utf-8-validate@5.0.10/node_modules/@solana/web3.js/src/connection.ts:6047:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.sendRawTransaction (/home/ljl/work/solana/pg-ex/client/node_modules/.pnpm/@solana+web3.js@1.98.0_bufferutil@4.0.9_utf-8-validate@5.0.10/node_modules/@solana/web3.js/src/connection.ts:6003:20)
+    at async Object.sendTransaction (/home/ljl/work/solana/pg-ex/client/node_modules/.pnpm/@metaplex-foundation+umi-rpc-web3js@1.0.0_@metaplex-foundation+umi@1.0.0_@solana+web3.js@1.98_tn7e5u6wbkf4mu6ugrajdupiay/node_modules/@metaplex-foundation/umi-rpc-web3js/src/createWeb3JsRpc.ts:335:25)
+    at async TransactionBuilder.sendAndConfirm (/home/ljl/work/solana/pg-ex/client/node_modules/.pnpm/@metaplex-foundation+umi@1.0.0/node_modules/@metaplex-foundation/umi/src/TransactionBuilder.ts:359:23)
+    at async main (/home/ljl/work/solana/pg-ex/client/token_decorate2.ts:63:18) {
+  signature: '',
+  transactionMessage: 'Transaction simulation failed: Error processing Instruction 0: custom program error: 0x1',
+  transactionLogs: [
+    'Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s invoke [1]',
+    'Program log: IX: Create Metadata Accounts v3',
+    'Program 11111111111111111111111111111111 invoke [2]',
+    'Transfer: insufficient lamports 1077076, need 15115600',
+    'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
+    'Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s consumed 8844 of 200000 compute units',
+    'Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s failed: custom program error: 0x1'
+  ]
+}
