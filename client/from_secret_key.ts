@@ -1,5 +1,7 @@
 
-// 从 私钥字符串 生成账户，配合 .env 配置文件
+// 从 私钥字符串 生成账户私钥的json文件，需要设置环境变量
+//  export SECRET_KEY=...
+// 
 import "dotenv/config"
 import base58 from 'bs58'
 import { Keypair } from "@solana/web3.js"
@@ -7,6 +9,7 @@ import path from "path"
 import fs from "fs"
 import { config } from "dotenv"
 config()
+
 // SECRET_KEY 从phantom  设置-》选中账户->显示私钥
 if(!process.env.SECRET_KEY){
     console.log("export SECRET_KEY first");
@@ -31,3 +34,5 @@ let file = "./.config/solana/" + account + ".json"
 let target = path.resolve(process.env.HOME,file)
 fs.writeFileSync(target,msg)
 console.log("write file  :\n",target);
+
+console.log("启用json可以用\n  solana config set -key " ,target)

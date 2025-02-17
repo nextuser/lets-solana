@@ -6,10 +6,8 @@ import { Buffer } from 'buffer';
 import dotenv from 'dotenv'
 import bs58 from 'bs58'
 
-
+//根据助记词推算密钥(secretkey)和地址(publickey)
 const ed25519 = require('ed25519-hd-key')
-
-
 dotenv.config()
 // BIP44路径
 const BIP44_PATH = "m/44'/501'/0'/0'";

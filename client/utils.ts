@@ -6,8 +6,8 @@ import dotenv from 'dotenv'
 import { TOKEN_PROGRAM_ID , AccountLayout } from '@solana/spl-token';
 dotenv.config();
 export const  DEVNET_RPC_URL:string = process.env.DEVNET_RPC_URL
+//用来模拟https://beta.solpg.io/ 的环境中的pg
 export type PlayGround = {
-    
     wallet : {
         keypair:web3.Keypair,
         publicKey:web3.PublicKey
