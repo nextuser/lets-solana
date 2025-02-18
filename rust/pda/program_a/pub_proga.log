@@ -1,0 +1,4 @@
+ljl@ljl-i5-14400:program_a$ solana program deploy ./target/sbf-solana-solana/release/program_a.so
+Program Id: EiASyeYVRPjfcEUBYKmew5S1evef1a7fhkr1PkfGLwrx
+
+Signature: RJSuiueKUCiGnCov8rnhQcnqqj3WMAUZtuUst4zQvNtoRGeasVzqyP26wamuC5zEg5s9c96eQGSh7Xz56KhpXif
