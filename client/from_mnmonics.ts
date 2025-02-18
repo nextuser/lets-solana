@@ -5,6 +5,8 @@ import * as ecc from '@noble/ed25519';
 import { Buffer } from 'buffer';
 import dotenv from 'dotenv'
 import bs58 from 'bs58'
+import fs from 'fs'
+import path from 'node:path/win32'
 
 //根据助记词推算密钥(secretkey)和地址(publickey)
 const ed25519 = require('ed25519-hd-key')
@@ -34,8 +36,25 @@ async function main() {
     // 输出公钥和私钥
     console.log('Public Key:', keypair.publicKey.toBase58());
     console.log('Private Key:', bs58.encode(keypair.secretKey)); // Base64 编码私钥
+
+    write_secretekey(keypair)
 }
 
+
+function write_secretekey(keypair : Keypair){
+    let arr = [];
+    keypair.secretKey.forEach((item)=>{
+        arr.push(item)
+    })
+
+    let account= keypair.publicKey.toBase58()
+    let msg = JSON.stringify(arr);
+    //console.log('msg ', msg)
+    let file = ".config/solana/" + account + ".json"
+    let target =process.env.HOME + "/" + file
+    fs.writeFileSync(target,msg)
+    console.log("write file  :\n",target);
+}
 main().catch(err => {
     console.error('发生错误:', err);
 });
