@@ -34,10 +34,13 @@ export function get_pg(payer? :web3.Keypair) : PlayGround{
     if(!payer){
         payer = getKeypair();
     }
-    const rpc_url = get_rpc_url();
+    let rpc_url = get_rpc_url();
     
+    
+    rpc_url = rpc_url.replace("$HELIUS_API_KEY",process.env.HELIUS_API_KEY)
+    console.log("connect to:",rpc_url);
     let connection = new web3.Connection(rpc_url, "confirmed");
-    console.log("connected:",rpc_url);
+    
     return {
         wallet : { publicKey:payer.publicKey,
             keypair :payer},
