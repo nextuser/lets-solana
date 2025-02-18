@@ -16,7 +16,8 @@ class Counter {
       }
     }
   }
-  
+
+ // todo 这个schema语法没有理解透彻
    const schema : Schema = new Map([
      [Counter, { kind: "struct", fields: [["counter", "u32"]] }],
    ]);
