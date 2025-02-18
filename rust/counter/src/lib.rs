@@ -15,7 +15,9 @@ pub struct Counter {
 
 entrypoint!(instruction);
 
-fn instruction(program_id: &Pubkey, accounts: &[AccountInfo], _data: &[u8]) -> ProgramResult {
+fn instruction(program_id: &Pubkey,
+     accounts: &[AccountInfo], 
+     _data: &[u8]) -> ProgramResult {
     let iter = &mut accounts.iter();
     let account = next_account_info(iter)?;
     if account.owner != program_id {
