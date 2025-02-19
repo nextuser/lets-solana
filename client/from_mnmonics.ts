@@ -1,12 +1,10 @@
 import { Keypair } from '@solana/web3.js';
 import * as bip39 from 'bip39';
 import BIP32Factory from 'bip32';
-import * as ecc from '@noble/ed25519';
 import { Buffer } from 'buffer';
 import dotenv from 'dotenv'
 import bs58 from 'bs58'
 import fs from 'fs'
-import path from 'node:path/win32'
 
 //根据助记词推算密钥(secretkey)和地址(publickey)
 const ed25519 = require('ed25519-hd-key')

@@ -5,6 +5,7 @@ import * as path from 'path';
 import dotenv from 'dotenv'
 import { TOKEN_PROGRAM_ID , AccountLayout } from '@solana/spl-token';
 dotenv.config();
+//console.log(process.env);
 export const  DEVNET_RPC_URL:string = process.env.DEVNET_RPC_URL
 //用来模拟https://beta.solpg.io/ 的环境中的pg
 export type PlayGround = {
@@ -21,21 +22,29 @@ export function getWssConnection(){
     return new  web3.Connection(process.env.DEVNET_WSS_URL,"confirmed");
 }
 
-export function get_rpc_url(){
-    if(process.env.SOLANA_ENV== "mainnet"){
+export function get_rpc_url(env : string) :string{
+    dotenv.config();
+    if(env == "mainnet"){
         //# return process.env.MAINNET_RPC_URL
-        return process.env.DEVNET_RPC_URL
+        return process.env.MAINNET_RPC_URL
     } else {
         return process.env.DEVNET_RPC_URL
     }
 }
 
-export function get_pg(payer? :web3.Keypair) : PlayGround{
+export function get_pg(payer? :web3.Keypair, env ? : string) : PlayGround{
     if(!payer){
         payer = getKeypair();
     }
-    let rpc_url = get_rpc_url();
-    
+    if(!env){
+        env = process.env.SOLANA_ENV;
+    }
+
+    let rpc_url = get_rpc_url(env);
+    if(typeof(rpc_url) != 'string' ){
+        console.log("error url:",rpc_url);
+        process.exit(-1);
+    }
     
     rpc_url = rpc_url.replace("$HELIUS_API_KEY",process.env.HELIUS_API_KEY)
     console.log("connect to:",rpc_url);
@@ -89,7 +98,8 @@ export function show_tx(digest: string) {
 export async function show_balance(connection:web3.Connection,addr :string, prompt ? : string){
     if(prompt) console.log(prompt);
     console.log("My address:", addr);
-    const balance = await connection.getBalance(new web3.PublicKey(addr));
+    let pk = new web3.PublicKey(addr);
+    const balance = await connection.getBalance(pk);
     console.log(`My balance: ${balance / web3.LAMPORTS_PER_SOL} SOL`);
 }
 
