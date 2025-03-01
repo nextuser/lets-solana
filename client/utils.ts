@@ -1,5 +1,5 @@
 import * as web3 from '@solana/web3.js';
-import { PublicKey } from '@solana/web3.js';
+import { PublicKey ,LAMPORTS_PER_SOL} from '@solana/web3.js';
 import * as fs from 'fs';
 import * as path from 'path';
 import dotenv from 'dotenv'
@@ -123,5 +123,10 @@ export async function query_token(owner,token?:string) {
     })
   
   }
+
+export async function query_balance() {
+    let pg = get_pg();
+    return  (await pg.connection.getBalance(pg.wallet.publicKey))/LAMPORTS_PER_SOL;
+}
 
 export const PROGRAM_ID= new PublicKey('D3ppXDXN3mzM6v8rQYTzwW8A3hCaDG5Eg6e7uToYJJjw');

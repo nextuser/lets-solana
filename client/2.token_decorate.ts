@@ -8,12 +8,12 @@ import { createSignerFromKeypair, none, signerIdentity } from "@metaplex-foundat
 import { createUmi } from '@metaplex-foundation/umi-bundle-defaults';
 import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from '@metaplex-foundation/umi-web3js-adapters';
 
-import {get_pg} from './utils'
+import {get_pg,query_balance} from './utils'
 import fs from 'fs'
 
 
-//todo need export TOKEN_MIN=...
-
+//todo need export TOKEN_MINT=...
+// TOKEN_MINT 来自1.token_create_mint.ts 生成的新token
 
 
 // 可以执行 token_mint.ts 生成一个token mint. 
@@ -26,6 +26,7 @@ if(process.env.TOKEN_MINT ){
 }
 async function main() {
     console.log("RUN...");
+    let cost = await query_balance();
     const pg = get_pg();
     // 加载钱包密钥对并设置铸币地址
     const myKeypair = pg.wallet.keypair
@@ -74,6 +75,9 @@ async function main() {
 
     let after_meta= findMetadataPda(umi,{mint:fromWeb3JsPublicKey(mint)})
     console.log('afeter_meta',after_meta);
+
+    cost = await query_balance() - cost;
+    console.log("cost:",cost)
 }
 
 main();

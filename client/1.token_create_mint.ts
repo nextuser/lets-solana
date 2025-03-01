@@ -7,7 +7,7 @@ import {
 } from '@solana/spl-token'
 
 import { Keypair ,PublicKey,Connection} from '@solana/web3.js'
-import {get_pg,PlayGround} from './utils'
+import {get_pg,PlayGround,query_balance} from './utils'
 
 async function create_token() : Promise<[PlayGround, Keypair,PublicKey]>{
   let pg = get_pg();
@@ -52,10 +52,14 @@ async function getSupply(conn : Connection,token : PublicKey){
 
 
 async function main(){
+  let cost = await query_balance();
   let [pg,minter,token] = await create_token();
   let token_account = await mint_token(token,minter,pg)
   let [supply,decimal,_] =  await getSupply(pg.connection,token)
   console.log("supply,decimal :",supply,decimal)
+  
+  cost = await query_balance() - cost;
+  console.log("cost:",cost);
   const tokenAccountInfo = await getAccount(
     pg.connection,
     token_account
@@ -66,8 +70,6 @@ async function main(){
    console.log("token account amount:",tokenAccountInfo.amount, 
     tokenAccountInfo.address.toBase58());
 }
-
-
 
 
 main();

@@ -7,7 +7,7 @@ import {
 } from '@solana/spl-token'
 
 import { Keypair ,PublicKey,Connection} from '@solana/web3.js'
-import {get_pg,PlayGround} from './utils'
+import {get_pg,PlayGround,query_balance} from './utils'
 import { openSync } from 'fs';
 import { exit } from 'process';
 //todo need export TOKEN_MIN=...
@@ -26,6 +26,7 @@ async function mint_token(token:PublicKey,minter : Keypair,pg :PlayGround,amount
 }
 
 async function main(){
+  let cost = await query_balance();
   let pg = get_pg();
   let minter = pg.wallet.keypair;
   let token = process.env.TOKEN_MINT
@@ -39,14 +40,14 @@ async function main(){
     pg.connection,
     token_account
     )
-    console.log("token account info : owner",tokenAccountInfo.owner.toBase58(), 
-                ",account address=",tokenAccountInfo.address.toBase58(),
-                "token address", tokenAccountInfo.mint.toBase58()  );  
-   console.log("token account amount:",tokenAccountInfo.amount, 
-    tokenAccountInfo.address.toBase58());
+  console.log("token account info : owner",tokenAccountInfo.owner.toBase58(), 
+              ",account address=",tokenAccountInfo.address.toBase58(),
+              "token address", tokenAccountInfo.mint.toBase58()  );  
+  console.log("token account amount:",tokenAccountInfo.amount, 
+  tokenAccountInfo.address.toBase58());
+  cost = await query_balance() - cost;
+  console.log("cost:",cost);
 }
-
-
 
 
 main();
