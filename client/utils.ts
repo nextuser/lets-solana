@@ -22,13 +22,16 @@ export function getWssConnection(){
     return new  web3.Connection(process.env.DEVNET_WSS_URL,"confirmed");
 }
 
-export function get_rpc_url(env : string) :string{
+export function get_rpc_url(env : string ) :string{
     dotenv.config();
     if(env == "mainnet"){
         //# return process.env.MAINNET_RPC_URL
         return process.env.MAINNET_RPC_URL
-    } else {
+    } else if(env == "devnet"){
         return process.env.DEVNET_RPC_URL
+    }
+    else {
+        return process.env.LOCAL_RPC_URL
     }
 }
 
@@ -36,11 +39,10 @@ export function get_pg(payer? :web3.Keypair, env ? : string) : PlayGround{
     if(!payer){
         payer = getKeypair();
     }
-    if(!env){
-        env = process.env.SOLANA_ENV;
-    }
+    env = process.env.SOLANA_ENV || 'localnet';
 
     let rpc_url = get_rpc_url(env);
+    console.log("get_pg rpc_url:",rpc_url)
     if(typeof(rpc_url) != 'string' ){
         console.log("error url:",rpc_url);
         process.exit(-1);
@@ -48,8 +50,8 @@ export function get_pg(payer? :web3.Keypair, env ? : string) : PlayGround{
     
     rpc_url = rpc_url.replace("$HELIUS_API_KEY",process.env.HELIUS_API_KEY)
     console.log("connect to:",rpc_url);
-    let connection = new web3.Connection(rpc_url, "confirmed");
-    
+    let connection = new web3.Connection(rpc_url, {commitment:"confirmed",confirmTransactionInitialTimeout:10000});
+
     return {
         wallet : { publicKey:payer.publicKey,
             keypair :payer},
@@ -79,7 +81,7 @@ function readSecretKeyFromFile(filePath: string): web3.Keypair {
 
 export function getKeypair() : web3.Keypair{
     // 示例：指定秘钥文件路径
-    const secretKeyFilePath = path.resolve(process.env.HOME,'./.config/solana/id.json');
+    const secretKeyFilePath = path.resolve(process.env.HOME,'./.config/solana/keys/bob.json');
     // 调用函数读取秘钥文件
     const keypair = readSecretKeyFromFile(secretKeyFilePath);
 
@@ -126,7 +128,12 @@ export async function query_token(owner,token?:string) {
 
 export async function query_balance() {
     let pg = get_pg();
-    return  (await pg.connection.getBalance(pg.wallet.publicKey))/LAMPORTS_PER_SOL;
+    try {
+        const balance = (await pg.connection.getBalance(pg.wallet.publicKey));
+        return balance / LAMPORTS_PER_SOL;
+    }catch(err){
+        console.error(err);
+    }
 }
 
 export const PROGRAM_ID= new PublicKey('D3ppXDXN3mzM6v8rQYTzwW8A3hCaDG5Eg6e7uToYJJjw');
