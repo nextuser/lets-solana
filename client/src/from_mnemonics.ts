@@ -10,21 +10,23 @@ import * as crypto from 'crypto'
 //根据助记词推算密钥(secretkey)和地址(publickey)
 ///const ed25519 = require('ed25519-hd-keyed25519-hd-key')
 import * as ed25519 from 'ed25519-hd-key'
+import {  toSuiAddress } from './sui_util';
 dotenv.config()
 // BIP44路径
 const BIP44_SOLANA_PATH = "m/44'/501'/0'/0'";
-const BIP44_SUI_PATH = "m/44'/784'/0'/0'";
-const BIP_PATH_FORMAT  = "m/%u'/784'/0'/0'"
+const BIP44_SUI_PATH = "m/44'/784'/0'/0'/0'";
+//const BIP_PATH_FORMAT  = "m/44'/%u'/0'/0'/0'"
 const COIN_SOLANA = "501";
 const COIN_SUI = "784";
 
+
 function getBip44Path(coinType:string) : string{
-    return `m/44'/${coinType}'/0'/0'`
+    return `m/44'/${coinType}'/0'/0'/0'`
 }
 
-async function generate_keypair(mnemonic:string,coinType:string) :Keypair{
+function generate_keypair(mnemonic:string,coinType:string) :Keypair{
         // 生成种子
-        const seed = await bip39.mnemonicToSeedSync(mnemonic);
+        const seed =  bip39.mnemonicToSeedSync(mnemonic);
         console.log('seed ', seed)
         const hex_bytes=  seed.toString('hex');
         console.log("hex seed byte",Buffer.from(hex_bytes));
@@ -37,18 +39,25 @@ async function generate_keypair(mnemonic:string,coinType:string) :Keypair{
         return keypair;
 }
 
-function uint8ArrayToHex(uint8Array) {
-    let hexString = '';
-    for (let i = 0; i < uint8Array.length; i++) {
-        const hex = uint8Array[i].toString(16).padStart(2, '0');
-        hexString += hex;
-    }
-    return hexString;
+
+function generate_keypair_path(mnemonic:string,bip44path:string) :Keypair{
+        // 生成种子
+        const seed =  bip39.mnemonicToSeedSync(mnemonic);
+        console.log('seed ', seed)
+        const hex_bytes=  seed.toString('hex');
+        console.log("hex seed byte",Buffer.from(hex_bytes));
+        console.log("****BIP44_PATH:",bip44path);
+        // 派生密钥
+        const derivedSeed = ed25519.derivePath(bip44path,hex_bytes).key
+        // 创建 ED25519 密钥对
+        const keypair = Keypair.fromSeed(derivedSeed.slice(0, 32)); // 只取前32字节
+        return keypair;
 }
+
 
 import { sha3_256 } from 'js-sha3';
 async function processSolana(mnemonic:string){
-    let keypair = await  generate_keypair(mnemonic,COIN_SOLANA);
+    let keypair = generate_keypair_path(mnemonic,BIP44_SOLANA_PATH);
 
     // 对公钥进行哈希处理
 // 输出公钥和私钥
@@ -74,23 +83,23 @@ async function main() {
         throw new Error('无效的助记词');
     }
 
-    processSolana(mnemonic);
+    await processSolana(mnemonic);
     processSui(mnemonic);
 }
 
 import { bech32 } from 'bech32';
-async function processSui(mnemonic:string){
-    const seed = await bip39.mnemonicToSeedSync(mnemonic);
+function processSui(mnemonic:string){
+    const seed = bip39.mnemonicToSeedSync(mnemonic);
     console.log('seed ', seed)
     const hex_bytes=  seed.toString('hex');
     console.log("hex seed byte",Buffer.from(hex_bytes));
-    const bip44path = getBip44Path(COIN_SUI);
+    const bip44path = BIP44_SUI_PATH;
     console.log("****BIP44_PATH:",bip44path);
     // 派生密钥
-    const derivedSeed = ed25519.derivePath(bip44path,hex_bytes).key
+    const privateKey = ed25519.derivePath(bip44path,hex_bytes).key
 
     // 步骤 3：生成 suiprivkey
-    const privateKeyWithFlag = Buffer.concat([Buffer.from([0x00]), derivedSeed]);
+    const privateKeyWithFlag = Buffer.concat([Buffer.from([0x00]), privateKey]);
     const words = bech32.toWords(privateKeyWithFlag);
     const suiPrivateKey = bech32.encode('suiprivkey', words);
     console.log("suiprivkey:", suiPrivateKey);
@@ -99,14 +108,13 @@ async function processSui(mnemonic:string){
     const keystoreEntry = privateKeyWithFlag.toString('base64');
     console.log("sui.keystore Entry:", keystoreEntry);
 
-    const publicKey = ed25519.getPublicKey(derivedSeed)
+    const publicKey = ed25519.getPublicKey(privateKey)
 
     // 步骤 5：生成公钥
     console.log("Public Key (hex):", publicKey.toString('hex'));
 
     // 步骤 6：生成 Sui 地址
-    const addressBytes = crypto.createHash('sha256').update(publicKey).digest().slice(0, 32);
-    const suiAddress = '0x' + addressBytes.toString('hex');
+    const suiAddress = toSuiAddress(publicKey);
     console.log("Sui Address:", suiAddress);
 
     // 对公钥进行哈希处理

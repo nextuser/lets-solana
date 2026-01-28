@@ -2,6 +2,7 @@
   "name": "client",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "test": "pnpm ts-mocha -p ./tsconfig.json -t 1000000 ./tests/test.ts",
     "build-and-test": "cargo build-sbf --manifest-path=./program/Cargo.toml --sbf-out-dir=./tests/fixtures && pnpm test",
@@ -20,7 +21,7 @@
     "@noble/ed25519": "^2.2.3",
     "@noble/hashes": "^1.7.1",
     "@solana/spl-token": "^0.4.12",
-    "@solana/web3.js": "^1.98.0",
+    "@solana/web3.js": "^1.98.4",
     "bech32": "^2.0.0",
     "bip32": "5.0.0-rc.0",
     "bip39": "^3.1.0",
@@ -39,13 +40,16 @@
     "tweetnacl-util": "^0.15.1"
   },
   "devDependencies": {
+    "@types/bip39": "^2.4.2",
     "@types/bn.js": "^5.1.0",
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.1",
+    "@types/node": "^25.0.2",
     "chai": "^4.3.4",
     "mocha": "^9.0.3",
     "solana-bankrun": "^0.3.0",
     "ts-mocha": "^10.0.0",
-    "typescript": "^4.3.5"
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
   }
 }

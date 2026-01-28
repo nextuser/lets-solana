@@ -1,4 +1,7 @@
 .history
+
+**/node_modules
+**/target
 .idea
 .vscode
 *.bak

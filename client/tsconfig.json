@@ -1,10 +1,22 @@
 {
    "compilerOptions": {
-     "types": ["mocha", "chai"],
+     "types": ["mocha", "chai","@types/node"],
      "typeRoots": ["./node_modules/@types"],
-     "lib": ["es2020"],
+     "lib": ["ES2020"],
      "module": "commonjs",
-     "target": "es2020",
-     "esModuleInterop": true
-   }
+     "target": "ES2020",
+     "rootDir": "src",
+     "outDir": "dist",
+     "moduleResolution": "node",
+     "allowImportingTsExtensions": true,
+     "emitDeclarationOnly": true,
+     "resolveJsonModule": true,
+     "esModuleInterop": true,
+     "declaration": true,
+     "sourceMap": true,
+     "removeComments": false
+
+   },
+   "include": ["src/**/*"],
+   "exclude": ["node_modules","dist"]
  }

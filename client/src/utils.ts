@@ -6,7 +6,7 @@ import dotenv from 'dotenv'
 import { TOKEN_PROGRAM_ID , AccountLayout } from '@solana/spl-token';
 dotenv.config();
 //console.log(process.env);
-export const  DEVNET_RPC_URL:string = process.env.DEVNET_RPC_URL || '';
+export const  DEVNET_RPC_URL:string = process.env.DEVNET_RPC_URL
 //用来模拟https://beta.solpg.io/ 的环境中的pg
 export type PlayGround = {
     wallet : {
@@ -134,6 +134,19 @@ export async function query_balance() {
     }catch(err){
         console.error(err);
     }
+}
+
+export async function airdropSol(connection: web3.Connection, address: string, amount: number = 1) {
+    const airdropSignature = await connection.requestAirdrop(
+      new PublicKey(address),
+      amount * LAMPORTS_PER_SOL
+    );
+    const block = await connection.getLatestBlockhash();
+    await connection.confirmTransaction({
+        signature:airdropSignature,
+        blockhash: block.blockhash,
+        lastValidBlockHeight:block.lastValidBlockHeight,
+    },'confirmed');
 }
 
 export const PROGRAM_ID= new PublicKey('D3ppXDXN3mzM6v8rQYTzwW8A3hCaDG5Eg6e7uToYJJjw');

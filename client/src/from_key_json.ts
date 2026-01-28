@@ -39,13 +39,15 @@ let accounts = [
     'Bob8VSgkbigNVLL3pxEeon9mKB5uLwnD9EtTaTooYYSi',
 ]
 
-accounts.forEach((account)=>{
+// accounts.forEach((account)=>{
    
-    let file_name = path.resolve(__dirname,`../../bak/${account}.json`)
-    console.log("json file:",file_name);
-    show_account(file_name)
-})
-show_account(process.env.HOME +"/.config/solana/id.json");
+//     let file_name = path.resolve(__dirname,`../../bak/${account}.json`)
+//     console.log("json file:",file_name);
+//     show_account(file_name)
+// })
+//show_account(process.env.HOME +"/.config/solana/id.json");
+show_account(process.env.HOME +"/.config/solana/keys/developer.json");
+show_account(process.env.HOME +"/developer.json");
 // show_account("BobMFsLAYCuhw2YdW898whM3EiHszuS9DUCR3AmEWkk4")
 // show_account("Bobb4B6n4898Zr7bQfttryCJDq4geib9vMZ6ZiGBWaWv")
 

@@ -3,17 +3,23 @@ import {
     getMint,
     mintTo,
     getOrCreateAssociatedTokenAccount,
+    getAssociatedTokenAddress,
     getAccount,
+    TOKEN_PROGRAM_ID,
+    ASSOCIATED_TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
 
 import { Keypair ,PublicKey,Connection} from '@solana/web3.js'
-import {get_pg,PlayGround,query_balance} from './utils'
+import {airdropSol, get_pg,PlayGround,query_balance} from './utils'
+import { Address } from 'cluster';
 
 async function create_token() : Promise<[PlayGround, Keypair,PublicKey]>{
   let pg = get_pg();
   const payer = pg.wallet.keypair;
   const token_authority = Keypair.generate();
   const freezer = Keypair.generate();
+
+  await airdropSol(pg.connection,payer.publicKey.toBase58());
 
   const token_addr = await createMint(
       pg.connection,
@@ -60,6 +66,29 @@ async function getSupply(conn : Connection,token : PublicKey){
     return [tokenInfo.supply,tokenInfo.decimals, tokenInfo.address]
 }
 
+async function ata_info_show(conn : Connection,
+  mint : PublicKey, 
+  authority : PublicKey){
+    console.log("ata info show:------------------------------------")
+    let ata = await getAssociatedTokenAddress(mint,authority);
+    console.log("ata account:",ata.toBase58());
+    let seeds = [
+      authority.toBuffer(),
+      TOKEN_PROGRAM_ID.toBuffer(), 
+      mint.toBuffer(),                 
+    ];
+    let [ata_derive,bump] = PublicKey.findProgramAddressSync(seeds,ASSOCIATED_TOKEN_PROGRAM_ID);
+    console.log("ata account derive:",ata_derive.toBase58());
+
+    if(ata_derive.equals(ata)){
+      console.log("ata account is derived by program : ", ASSOCIATED_TOKEN_PROGRAM_ID.toBase58(),"bump:",bump);      
+    }
+
+    let ata_account = await conn.getAccountInfo(ata);
+    console.log("ata account owner", ata_account?.owner.toBase58());
+
+
+}
 
 async function main(){
     let cost = await query_balance();
@@ -95,6 +124,9 @@ async function main(){
                 "token address", tokenAccountInfo.mint.toBase58()  );  
    console.log("token account amount:",tokenAccountInfo.amount, 
     tokenAccountInfo.address.toBase58());
+
+
+    await ata_info_show(pg.connection,token_mint.address,target);
 }
 
 

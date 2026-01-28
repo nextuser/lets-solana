@@ -9,32 +9,33 @@ import crypto from 'crypto'
 import dotenv from 'dotenv'
 dotenv.config();
 import { bytesToHex } from '@noble/hashes/utils';
-const SUI_ADDRESS_LENGTH=32
+import { toSuiAddress } from './sui_util';
+const SUI_ADDRESS_LENGTH=32;
 
-function normalizeSuiAddress(value, forceAdd0x = false) {
-    let address = value.toLowerCase();
-    if (!forceAdd0x && address.startsWith("0x")) {
-      address = address.slice(2);
-    }
-    return `0x${address.padStart(SUI_ADDRESS_LENGTH * 2, "0")}`;
-  }
+// function normalizeSuiAddress(value, forceAdd0x = false) {
+//     let address = value.toLowerCase();
+//     if (!forceAdd0x && address.startsWith("0x")) {
+//       address = address.slice(2);
+//     }
+//     return `0x${address.padStart(SUI_ADDRESS_LENGTH * 2, "0")}`;
+//   }
 
-  function toSuiBytes(publicKey:Uint8Array) {
-    const rawBytes = publicKey;
-    const suiBytes = new Uint8Array(rawBytes.length + 1);
-    suiBytes.set([0]);
-    suiBytes.set(rawBytes, 1);
-    console.log("toSuiBytes length:",suiBytes.length);
-    return suiBytes;
-  }
-  /**
-   * Return the Sui address associated with this Ed25519 public key
-   */
-  function toSuiAddress(publicKey:Uint8Array ) {
-    return normalizeSuiAddress(
-      bytesToHex(blake2b(toSuiBytes(publicKey), { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2)
-    );
-  }
+//   function toSuiBytes(publicKey:Uint8Array) {
+//     const rawBytes = publicKey;
+//     const suiBytes = new Uint8Array(rawBytes.length + 1);
+//     suiBytes.set([0],0);
+//     suiBytes.set(rawBytes, 1);
+//     console.log("toSuiBytes length:",suiBytes.length);
+//     return suiBytes;
+//   }
+//   /**
+//    * Return the Sui address associated with this Ed25519 public key
+//    */
+//   function toSuiAddress(publicKey:Uint8Array ) {
+//     return normalizeSuiAddress(
+//       bytesToHex(blake2b(toSuiBytes(publicKey), { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2)
+//     );
+//   }
 
 
 
@@ -66,7 +67,7 @@ function normalizeSuiAddress(value, forceAdd0x = false) {
   console.log("sui.keystore Entry:", keystoreEntry);
 
   // 步骤 5：生成公钥   注意这里因为私钥前面没有加0,需要第二个参数设置为false
-  const publicKey = await getPublicKey(privateKey,false);
+  const publicKey =  getPublicKey(privateKey,true);
 
   console.log("base64 addr",base64.deserialize(publicKey))
   const suiAddress: string =  toSuiAddress(publicKey)
